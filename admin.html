@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZONAZERO | Admin Panel</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --accent: #38bdf8;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 10px; 
+            line-height: 1.5;
+        }
+
+        .container { max-width: 900px; margin: auto; padding-bottom: 50px; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5px;
+            border-bottom: 1px solid var(--surface);
+            margin-bottom: 20px;
+        }
+
+        h1 { font-size: 1.2rem; color: var(--accent); margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* FORMULARIO ADAPTABLE */
+        .panel-form { 
+            background: var(--surface); 
+            padding: 20px; 
+            border-radius: 15px; 
+            margin-bottom: 25px; 
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        
+        label { font-size: 0.8rem; color: var(--text-dim); font-weight: bold; text-transform: uppercase; }
+
+        input, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #334155; 
+            background: var(--bg); 
+            color: #fff; 
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        input:focus { border-color: var(--accent); outline: none; }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .checkbox-group input { width: auto; height: 20px; width: 20px; }
+
+        .actions-form { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
+
+        /* BOTONES */
+        .btn { 
+            padding: 15px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: 800; 
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-guardar { background: var(--accent); color: var(--bg); }
+        .btn-cancelar { background: var(--danger); color: #fff; display: none; }
+
+        /* LISTADO RESPONSIVO (CARDS EN MÓVIL, TABLA EN PC) */
+        .lista-productos { display: grid; gap: 15px; }
+
+        .prod-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .prod-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .prod-info h3 { margin: 0; font-size: 1.1rem; }
+        .prod-info span { font-size: 0.8rem; color: var(--text-dim); }
+
+        .prod-price { font-weight: bold; color: var(--accent); font-size: 1.1rem; }
+
+        .badge { 
+            padding: 4px 10px; 
+            border-radius: 20px; 
+            font-size: 0.7rem; 
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .activo { background: rgba(34, 197, 94, 0.1); color: var(--success); border: 1px solid var(--success); }
+        .inactivo { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid var(--danger); }
+
+        .prod-actions { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 10px; 
+            margin-top: 5px; 
+            padding-top: 10px; 
+            border-top: 1px solid rgba(255,255,255,0.05); 
+        }
+
+        .btn-sm { padding: 10px; font-size: 0.75rem; }
+
+        #loader { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 9999;
+        }
+
+
+        .nav-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        background: var(--surface);
+        padding: 5px;
+        border-radius: 10px;
+    }
+    
+    .tab-btn {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        background: transparent;
+        color: var(--text-dim);
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+    
+    .tab-btn.active {
+        background: var(--bg);
+        color: var(--accent);
+        box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+    }
+
+    .section-content { display: none; }
+    .section-content.active { display: block; }
+
+    /* Estilo para el control de la mesa */
+    .mesa-card {
+        background: var(--surface);
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        border: 2px solid #334155;
+    }
+    
+    .mesa-status-indicator {
+        font-size: 1.5rem;
+        font-weight: 900;
+        margin-bottom: 20px;
+        display: block;
+    }
+
+    .status-1 { color: var(--success); } /* Disponible */
+    .status-0 { color: var(--danger); }  /* Ocupada */
+
+        /* DISEÑO PARA TABLETS Y PC */
+        @media (min-width: 600px) {
+            .actions-form { grid-template-columns: 1fr 1fr; }
+            .lista-productos { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+
+<div id="loader">
+    <div style="border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;"></div>
+    <p>Sincronizando...</p>
+</div>
+
+<div class="container">
+    <header>
+        <h1>ZONAZERO Admin</h1>
+        <div id="visitas-count" style="font-size: 0.8rem; color: var(--accent);"></div>
+        <button class="btn btn-sm" onclick="cargarDatos()" style="background: var(--surface); color: white;">🔄 Actualizar</button>
+    </header>
+
+    
+    <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('productos', this)">PRODUCTOS</button>
+        <button class="tab-btn" onclick="switchTab('mesa', this)">MESA BILLAR</button>
+        <button class="tab-btn" onclick="switchTab('promociones', this)">PROMOCIONES</button> <!-- Nuevo -->
+    </nav>
+
+    <!-- SECCIÓN: PROMOCIONES -->
+    <div id="sec-promociones" class="section-content">
+        <div class="panel-form">
+            <h3>🚀 Nueva Promoción</h3>
+            <div class="form-group">
+                <label>Título</label>
+                <input type="text" id="promo-titulo" placeholder="Ej: AGUAS FRESCAS">
+            </div>
+            
+            <div class="form-group">
+                <label>Subtítulo / Precio</label>
+                <input type="text" id="promo-subtitulo" placeholder="Ej: 2x$35 ESTILO MICHOACANA">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="form-group">
+                    <label>Imagen (URL)</label>
+                    <input type="text" id="promo-imagen" placeholder="URL de la imagen">
+                </div>
+                <div class="form-group">
+                    <label>Etiqueta</label>
+                    <input type="text" id="promo-etiqueta" placeholder="Ej: SOLO HOY">
+                </div>
+            </div>
+
+            <div class="actions-form">
+                <button class="btn btn-guardar" onclick="guardarPromocion()">Agregar al Banner</button>
+            </div>
+        </div>
+
+        <!-- Lista de Promociones Activas -->
+        <div class="lista-productos" id="contenedor-promociones">
+            <!-- Tarjetas de promos se cargan aquí -->
+        </div>
+    </div>
+
+    <!-- SECCIÓN: MESA DE BILLAR -->
+    <div id="sec-mesa" class="section-content">
+        <div class="mesa-card" id="mesa-container">
+            <span class="mesa-status-indicator" id="mesa-texto">CARGANDO...</span>
+            <div class="actions-form">
+                <button class="btn btn-guardar" onclick="actualizarEstadoMesa(1)">MARCAR DISPONIBLE</button>
+                <button class="btn btn-cancelar" style="display:block" onclick="actualizarEstadoMesa(0)">MARCAR OCUPADA</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="sec-productos" class="section-content active">
+        <!-- Aquí va el Panel Form y el Contenedor de Productos que ya teníamos -->
+         <!-- Formulario -->
+        <div class="panel-form">
+            <input type="hidden" id="fila-id">
+
+            <div class="form-group">
+                <label>Categoría</label>
+                <input type="text" id="categoria" list="categorias-list" placeholder="EJ: SNACKS..." oninput="this.value = this.value.toUpperCase()">
+                
+                <datalist id="categorias-list">
+                    </datalist>
+            </div>
+            
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" id="nombre" placeholder="Nombre del producto">
+            </div>
+
+            <div class="form-group">
+                <label>Descripción</label>
+                <textarea id="descripcion" rows="3" placeholder="Detalles para el cliente..."></textarea>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="form-group">
+                    <label>Precio ($)</label>
+                    <input type="number" id="precio">
+                </div>
+                <div class="form-group">
+                    <label>Imagen</label>
+                    <input type="text" id="imagen" placeholder="URL">
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="activo" checked>
+                <label>Producto Visible en App</label>
+            </div>
+            
+            <div class="actions-form">
+                <button class="btn btn-guardar" onclick="guardarProducto()">Guardar Producto</button>
+                <button class="btn btn-cancelar" id="btn-cancelar" onclick="limpiarFormulario()">Cancelar</button>
+            </div>
+        </div>
+            <!-- Lista -->
+        <div class="lista-productos" id="contenedor-productos">
+            <!-- Tarjetas se cargan aquí -->
+        </div>
+    </div>
+</div>
+
+<style> @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } } </style>
+
+<script>
+    const URL_API = "https://script.google.com/macros/s/AKfycbyFrABEgidH67AkQ9SMOp5MFKARYqmlFgejMHqVO6a2GwppY_omfcOOn0Ne49X56szV/exec";
+    let productosActuales = [];
+    let promosActuales = [];
+
+    window.onload = cargarDatos;
+
+
+    // --- LÓGICA DE NAVEGACIÓN ---
+    function switchTab(seccion, btn) {
+        document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        
+        document.getElementById(`sec-${seccion}`).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    // --- LÓGICA DE MESA ---
+    let estadoMesaActual = 0;
+
+    async function cargarDatos() {
+    const loader = document.getElementById('loader');
+    loader.style.display = "flex";
+    
+    try {
+        const res = await fetch(`${URL_API}?admin=true`);
+        const datos = await res.json();
+        
+
+        estadoMesaActual = datos.estadoMesa; // Recibimos 1 o 0
+        
+        document.getElementById('visitas-count').innerText = `APP_VISITAS: ${datos.totalVisitas}`;
+
+
+        actualizarInterfazMesa();
+
+        // 1. Guardamos los datos
+        productosActuales = datos.menu;
+        promosActuales = datos.promos || [];
+        
+        // 2. Actualizamos las sugerencias ANTES de renderizar las cards
+        actualizarSugerenciasCategorias();
+        
+        // 3. Dibujamos la interfaz
+        renderizarCards();
+        renderizarPromosAdmin();
+        
+    } catch (e) {
+        console.error(e);
+        alert("Error de conexión");
+    }
+    loader.style.display = "none";
+}
+
+    function renderizarCards() {
+        const contenedor = document.getElementById('contenedor-productos');
+        contenedor.innerHTML = "";
+        
+        productosActuales.forEach(p => {
+            const estadoClase = p.activo ? 'activo' : 'inactivo';
+            const estadoTexto = p.activo ? 'Visible' : 'Oculto';
+            const pJSON = JSON.stringify(p).replace(/'/g, "\\'");
+
+            contenedor.innerHTML += `
+                <div class="prod-card" style="border-color: ${p.activo ? 'var(--success)' : 'var(--danger)'}">
+                    <div class="prod-header">
+                        <div class="prod-info">
+                            <h3>${p.nombre}</h3>
+                            <span>${p.categoria}</span>
+                        </div>
+                        <span class="badge ${estadoClase}">${estadoTexto}</span>
+                    </div>
+                    <div class="prod-price">$${p.precio}</div>
+                    <div class="prod-actions">
+                        <button class="btn btn-sm btn-guardar" onclick='cargarEdicion(${pJSON})'>Editar</button>
+                        <button class="btn btn-sm btn-cancelar" style="display:block" onclick="eliminarProducto(${p.fila}, '${p.nombre}')">Eliminar</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    async function enviarPeticion(accion, producto) {
+        document.getElementById('loader').style.display = "flex";
+        try {
+            const response = await fetch(URL_API, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain" },
+                body: JSON.stringify({ accion: accion, producto: producto })
+            });
+            
+            const resultado = await response.json();
+
+            if (resultado.status === 'ok') {
+                // Notificación de éxito
+                const mensaje = accion === 'crear' ? '✅ Producto agregado con éxito' : '📝 Producto actualizado correctamente';
+                alert(mensaje); 
+                
+                await cargarDatos();
+                limpiarFormulario();
+            } else {
+                alert("❌ Error: " + resultado.msj);
+            }
+        } catch (e) {
+            alert("❌ Error de red o en el servidor");
+            console.error(e);
+        } finally {
+            document.getElementById('loader').style.display = "none";
+        }
+    }
+
+    function guardarProducto() {
+       const fila = document.getElementById('fila-id').value;
+        const producto = {
+            fila: fila ? parseInt(fila) : null,
+            // Forzamos mayúsculas antes de enviar al Excel
+            categoria: document.getElementById('categoria').value.trim().toUpperCase(), 
+            nombre: document.getElementById('nombre').value,
+            descripcion: document.getElementById('descripcion').value,
+            precio: document.getElementById('precio').value,
+            imagen: document.getElementById('imagen').value,
+            activo: document.getElementById('activo').checked
+        };
+        
+        if(!producto.nombre || !producto.categoria) return alert("Faltan datos obligatorios");
+        
+        enviarPeticion(fila ? 'editar' : 'crear', producto);
+    }
+
+    function eliminarProducto(fila, nombre) {
+        if(confirm(`¿Eliminar ${nombre}?`)) {
+            enviarPeticion('eliminar', { fila: fila });
+        }
+    }
+
+    function cargarEdicion(p) {
+        document.getElementById('fila-id').value = p.fila;
+        document.getElementById('categoria').value = p.categoria;
+        document.getElementById('nombre').value = p.nombre;
+        document.getElementById('descripcion').value = p.descripcion;
+        document.getElementById('precio').value = p.precio;
+        document.getElementById('imagen').value = p.imagen;
+        document.getElementById('activo').checked = p.activo;
+        document.getElementById('btn-cancelar').style.display = "block";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function limpiarFormulario() {
+        document.getElementById('fila-id').value = "";
+        document.getElementById('categoria').value = "";
+        document.getElementById('nombre').value = "";
+        document.getElementById('descripcion').value = "";
+        document.getElementById('precio').value = "";
+        document.getElementById('imagen').value = "";
+        document.getElementById('activo').checked = true;
+        document.getElementById('btn-cancelar').style.display = "none";
+    }
+
+    function actualizarSugerenciasCategorias() {
+        const lista = document.getElementById('categorias-list');
+        if (!lista) return;
+
+        // Obtenemos categorías únicas, limpiamos espacios y pasamos a Mayúsculas
+        const categorias = productosActuales.map(p => p.categoria.trim().toUpperCase());
+        const categoriasUnicas = [...new Set(categorias)].filter(c => c !== "");
+
+        // Limpiar opciones actuales
+        lista.innerHTML = "";
+
+        // Crear y añadir nuevas opciones
+        categoriasUnicas.sort().forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            lista.appendChild(option);
+        });
+        
+        console.log("Sugerencias actualizadas:", categoriasUnicas); // Para debug en consola
+
+    }
+
+    function actualizarInterfazMesa() {
+        const txt = document.getElementById('mesa-texto');
+        const container = document.getElementById('mesa-container');
+        
+        if (estadoMesaActual == 1) {
+            txt.innerText = "🟢 MESA DISPONIBLE";
+            txt.className = "mesa-status-indicator status-1";
+            container.style.borderColor = "var(--success)";
+        } else {
+            txt.innerText = "🔴 MESA OCUPADA";
+            txt.className = "mesa-status-indicator status-0";
+            container.style.borderColor = "var(--danger)";
+        }
+    }
+
+    async function actualizarEstadoMesa(nuevoEstado) {
+        document.getElementById('loader').style.display = "flex";
+        try {
+            await fetch(URL_API, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain" },
+                body: JSON.stringify({ accion: 'actualizarMesa', estado: nuevoEstado })
+            });
+            estadoMesaActual = nuevoEstado;
+            actualizarInterfazMesa();
+            alert("Mesa actualizada correctamente");
+        } catch (e) {
+            alert("Error al actualizar la mesa");
+        }
+        document.getElementById('loader').style.display = "none";
+    }
+
+    // --- LÓGICA DE PROMOCIONES ---
+
+function renderizarPromosAdmin() {
+    const contenedor = document.getElementById('contenedor-promociones');
+    if (!contenedor) return;
+    contenedor.innerHTML = "";
+    
+    if (promosActuales.length === 0) {
+        contenedor.innerHTML = "<p style='text-align:center; padding:20px; color:#888;'>No hay promociones activas.</p>";
+        return;
+    }
+
+    promosActuales.forEach((p, index) => {
+        contenedor.innerHTML += `
+            <div class="prod-card" style="border-color: var(--accent); margin-bottom: 10px;">
+                <div class="prod-header">
+                    <div class="prod-info">
+                        <h3 style="color:var(--accent)">${p.titulo}</h3>
+                        <span>${p.etiqueta || 'SIN ETIQUETA'}</span>
+                    </div>
+                </div>
+                <div class="prod-price" style="font-size: 0.9rem; color: #ccc;">${p.subtitulo}</div>
+                <div class="prod-actions">
+                    <button class="btn btn-sm btn-cancelar" style="display:block; width: 100%;" onclick="eliminarPromocion(${index + 2})">🗑️ Eliminar de Banner</button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+async function guardarPromocion() {
+    // 1. Capturamos los elementos para poder limpiarlos después
+    const tInput = document.getElementById('promo-titulo');
+    const sInput = document.getElementById('promo-subtitulo');
+    const iInput = document.getElementById('promo-imagen');
+    const eInput = document.getElementById('promo-etiqueta');
+
+    const promo = {
+        titulo: tInput.value.trim(),
+        subtitulo: sInput.value.trim(),
+        imagen: iInput.value.trim(),
+        etiqueta: eInput.value.trim()
+    };
+
+    // Validación básica
+    if (!promo.titulo || !promo.imagen) return alert("Título e Imagen son obligatorios");
+
+    document.getElementById('loader').style.display = "flex";
+    
+    try {
+        const res = await fetch(URL_API, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify({ accion: 'guardarPromocion', producto: promo })
+        });
+        
+        const r = await res.json();
+        console.log("Respuesta servidor:", r); // Para que veas en consola qué llega
+
+        if (r.status === 'ok') {
+            // AHORA SÍ: Alerta, Limpieza y Recarga
+            alert("✅ ¡Promoción guardada exitosamente!");
+            
+            // Limpiamos manualmente por si limpiarFormPromo() falla
+            tInput.value = "";
+            sInput.value = "";
+            iInput.value = "";
+            eInput.value = "";
+
+            // Forzamos la recarga de datos
+            await cargarDatos(); 
+            
+            // Si después de cargarDatos no ves el cambio, forzamos el dibujo:
+            if(typeof renderizarPromosAdmin === 'function') {
+                renderizarPromosAdmin();
+            }
+        } else {
+            alert("❌ Error del servidor: " + (r.msj || "Desconocido"));
+        }
+    } catch (e) {
+        console.error("Error en fetch:", e);
+        alert("Error crítico al guardar promo. Revisa la consola.");
+    } finally {
+        document.getElementById('loader').style.display = "none";
+    }
+}
+
+async function eliminarPromocion(fila) {
+    if (!confirm("¿Eliminar esta promoción del banner?")) return;
+    
+    document.getElementById('loader').style.display = "flex";
+    try {
+        const res = await fetch(URL_API, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify({ accion: 'eliminarPromocion', fila: fila })
+        });
+        await cargarDatos();
+    } catch (e) {
+        alert("Error al eliminar");
+    } finally {
+        document.getElementById('loader').style.display = "none";
+    }
+}
+
+function limpiarFormPromo() {
+    document.getElementById('promo-titulo').value = "";
+    document.getElementById('promo-subtitulo').value = "";
+    document.getElementById('promo-imagen').value = "";
+    document.getElementById('promo-etiqueta').value = "";
+}
+    
+</script>
+</body>
+</html>

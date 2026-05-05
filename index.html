@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>El Bicho</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <span class="zona-text">Z<span class="bola-ocho">8</span>NA</span><span class="zero-text">ZER<span class="hielo">🧊</span></span>
+        </div>
+        <button id="theme-toggle" class="theme-btn">☀️</button>
+    </header>
+
+    <!-- Barra de Filtros tipo Uber Eats -->
+    <nav class="category-bar" id="category-bar">
+        <!-- Se llena con JavaScript -->
+    </nav>
+
+        <!-- SECCIÓN DE ANUNCIOS/PROMOS -->
+    <div id="banner-promos" class="zz-banner-container">
+        <!-- Aquí se cargarán las cards dinámicamente -->
+    </div>
+
+    <main class="container" id="contenedor-principal">
+        <div class="loader">Iniciando sistema...</div>
+    </main>
+
+    <!-- Widget Billar Colapsable -->
+    <div id="widget-billar" class="collapsed">
+        <div class="widget-header" onclick="toggleWidget()">
+            <div id="punto-estado" class="estado-dot"></div>
+            <span id="texto-estado">Cargando...</span>
+            <span id="widget-icon">▲</span>
+        </div>
+        <div class="widget-content">
+            <p class="horario-info">🕒 Horario de atención: <b>7:00 AM - 8:00 PM</b></p>
+            <button class="btn-reservar" onclick="reservarPorWhatsApp()">
+                RESERVAR MESA POR WHATSAPP
+            </button>
+        </div>
+    </div>
+    
+
+    <!-- Modal de Detalle de Producto -->
+<div id="modal-detalle" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="cerrarModal()">&times;</span>
+        <div id="modal-body">
+            <!-- Se llena dinámicamente -->
+        </div>
+    </div>
+</div>
+
+<!-- BOTÓN VOLVER ARRIBA -->
+<button id="btn-scroll-top" class="zz-btn-top" onclick="irArriba()">
+    <span class="zz-arrow-up">▲</span>
+</button>
+
+    <script src="app.js"></script>
+</body>
+</html>
