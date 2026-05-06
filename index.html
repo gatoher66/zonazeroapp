@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ZonaZero</title>
+    <title>El Bicho</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,6 +14,23 @@
         </div>
         <button id="theme-toggle" class="theme-btn">☀️</button>
     </header>
+
+    <div class="zz-ticker-wrapper">
+    <div class="zz-ticker">
+        <div class="zz-ticker-item">🚫 ZERO ALCOHOL</div>
+        <div class="zz-ticker-item">🎱 JUEGA LIMPIO</div>
+        <div class="zz-ticker-item">🧊 ZERO BRONCAS</div>
+        <div class="zz-ticker-item">⚡ ZERO FILAS</div>
+        <div class="zz-ticker-item">🌡️ ZERO CALOR</div>
+        <div class="zz-ticker-item">🚭 ZERO HUMO</div>
+        <div class="zz-ticker-item">🚫 ZERO ALCOHOL</div>
+        <div class="zz-ticker-item">🎱 JUEGA LIMPIO</div>
+        <div class="zz-ticker-item">🧊 ZERO BRONCAS</div>
+        <div class="zz-ticker-item">⚡ ZERO FILAS</div>
+        <div class="zz-ticker-item">🌡️ ZERO CALOR</div>
+        <div class="zz-ticker-item">🚭 ZERO HUMO</div>
+    </div>
+</div>
 
     <!-- Barra de Filtros tipo Uber Eats -->
     <nav class="category-bar" id="category-bar">
@@ -29,20 +46,29 @@
         <div class="loader">Iniciando sistema...</div>
     </main>
 
-    <!-- Widget Billar Colapsable -->
+
     <div id="widget-billar" class="collapsed">
-        <div class="widget-header" onclick="toggleWidget()">
-            <div id="punto-estado" class="estado-dot"></div>
-            <span id="texto-estado">Cargando...</span>
-            <span id="widget-icon">▲</span>
-        </div>
-        <div class="widget-content">
-            <p class="horario-info">🕒 Horario de atención: <b>7:00 AM - 8:00 PM</b></p>
-            <button class="btn-reservar" onclick="reservarPorWhatsApp()">
-                RESERVAR MESA POR WHATSAPP
-            </button>
-        </div>
+    <div class="widget-header" onclick="toggleWidget()">
+        <div id="punto-estado" class="estado-dot"></div>
+        <span id="texto-estado">Cargando...</span>
+        <span id="widget-icon">▲</span>
     </div>
+
+    <div class="mini-footer-widget">
+        <span>© 2026 <b>ZONAZERO</b></span>
+        <span class="dot">•</span>
+        <span>📍 Santos Reyes Nopala</span>
+        <span class="dot">•</span>
+        <span>Av. Hidalgo S/N BARRIO EL MIRADOR A 100M DEL PANTEÓN MUNICIPAL</span>
+    </div>
+
+    <div class="widget-content">
+        <p class="horario-info">🕒 Horario de atención: <b>7:00 AM - 8:00 PM</b></p>
+        <button class="btn-reservar" onclick="reservarPorWhatsApp()">
+            RESERVAR MESA POR WHATSAPP
+        </button>
+    </div>
+</div>
     
 
     <!-- Modal de Detalle de Producto -->
@@ -59,6 +85,7 @@
 <button id="btn-scroll-top" class="zz-btn-top" onclick="irArriba()">
     <span class="zz-arrow-up">▲</span>
 </button>
+
 
     <script src="app.js"></script>
 </body>
