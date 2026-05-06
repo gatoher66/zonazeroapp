@@ -120,7 +120,7 @@ header {
     gap: 12px;
     background: var(--bg-dark);
     position: sticky;
-    top: 73px; /* Justo debajo del header */
+    top: 90px; /* Justo debajo del header */
     z-index: 999;
     scrollbar-width: none; /* Firefox */
 }
@@ -288,30 +288,11 @@ section {
     transform: scale(0.95);
 }
 
-#widget-billar {
-    /* POSICIONAMIENTO CRÍTICO */
-    position: fixed; 
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 9999; /* Para que siempre esté por encima de los productos */
-    
-    /* ESTILOS VISUALES */
-    background: var(--widget-bg); /* O el color que prefieras */
-    border-top: 2px solid var(--neon-cyan);
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-    transition: transform 0.4s ease-in-out;
-}
 
-/* Cuando está colapsado, solo muestra el header */
-#widget-billar.collapsed {
-    transform: translateY(calc(100% - 60px)); /* Ajusta los 60px según el alto de tu header */
-}
 
 
 .widget-header {
-    height: 55px;
+    height: 35px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -324,8 +305,21 @@ section {
 }
 
 .widget-content {
-    padding: 20px;
+    padding: 10px;
     background: #000000;
+}
+
+/* Tema Claro: Fondo Blanco Sólido */
+[data-theme="light"] .widget-content {
+    background-color: #ffffff !important;
+    color: #333333;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* Tema Oscuro: Fondo Negro Sólido */
+[data-theme="dark"] .widget-content {
+    background-color: #000000 !important;
+    color: #ffffff;
 }
 
 .status-box {
@@ -658,4 +652,169 @@ input[type="datetime-local"] {
     font-size: 1.1rem;
     font-weight: bold;
     margin: 5px 0;
+}
+
+/* Mejoras de UX */
+.category-bar {
+    -webkit-overflow-scrolling: touch;
+    scroll-padding: 20px;
+}
+
+.producto-card {
+    will-change: transform; /* Optimiza animaciones en móvil */
+    backface-visibility: hidden;
+}
+
+/* Animación de carga más fluida */
+.loader {
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.5; transform: scale(0.98); }
+    50% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0.5; transform: scale(0.98); }
+}
+
+#widget-billar {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: var(--widget-bg);
+    border-top: 2px solid var(--neon-cyan);
+    border-radius: 20px 20px 0 0;
+    transition: all 0.4s ease-in-out;
+    overflow: hidden; /* Evita que se salgan las esquinas */
+}
+
+/* El Footer SIEMPRE visible */
+.mini-footer-widget {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    padding: 5px;
+    order: 2;
+    text-align: center;
+    
+    /* --- CAMBIO DINÁMICO DE FONDO --- */
+    /* Usamos la variable de superficie que ya cambia en tu modo claro/oscuro */
+    background-color: var(--bg-dark); 
+    width: 100%;
+    
+    /* Aseguramos que sea totalmente opaco */
+    opacity: 1 !important;
+    z-index: 10;
+}
+
+/* Configuración específica para Tema Claro (Fondo Blanco) */
+[data-theme="light"] .mini-footer-widget {
+    background-color: #ffffff; /* Blanco puro */
+    color: #666666; /* Un gris oscuro para que se lea bien en blanco */
+    border-top: 1px solid #eeeeee;
+}
+
+/* Configuración específica para Tema Oscuro (Fondo Negro) */
+[data-theme="dark"] .mini-footer-widget {
+    background-color: #000000; /* Negro puro */
+    color: var(--text-dim);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+/* --- ESTADO COLAPSADO (Imagen 1) --- */
+#widget-billar.collapsed {
+    /* Ajustamos la altura para que quepa el header Y el footer */
+    transform: translateY(0); 
+    height: auto; 
+}
+
+#widget-billar.collapsed .widget-content {
+    display: none !important; /* Escondemos el botón de WhatsApp pero NO el footer */
+}
+
+/* --- ESTADO ABIERTO (Imagen 2) --- */
+#widget-billar:not(.collapsed) .mini-footer-widget {
+    order: 4; /* Mueve el footer al final de la lista (abajo del botón) */
+    padding-bottom: 15px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.widget-header { order: 1; }
+.widget-content { order: 3; padding: 20px 15px; }
+
+/* Estilos de texto */
+.mini-footer-widget b { color: var(--neon-cyan); }
+.mini-footer-widget .dot { color: var(--neon-fucsia); }
+
+
+/* --- CONTENEDOR DE LA CINTA --- */
+.zz-ticker-wrapper {
+    width: 100%;
+    overflow: hidden; /* Esconde lo que sale de la pantalla */
+    background: #000;
+    border-bottom: 1px solid var(--neon-cyan);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 0;
+    white-space: nowrap;
+    position: relative;    
+    /* CAMBIO CLAVE: Fixed en lugar de Sticky */
+    position: fixed;
+    top: 60px; /* Ajusta este número para que pegue justo al borde de tu header */
+    left: 0;
+    z-index: 800; 
+    
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+
+
+/* --- ANIMACIÓN DE MOVIMIENTO --- */
+.zz-ticker {
+    display: inline-flex;
+    animation: ticker-scroll 25s linear infinite; /* Velocidad constante */
+    
+}
+
+.zz-ticker-item {
+    padding: 0 30px;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    /* Efecto Neón Suave */
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+}
+
+/* Colores alternos tipo feria */
+.zz-ticker-item:nth-child(odd) {
+    color: var(--neon-cyan);
+}
+.zz-ticker-item:nth-child(even) {
+    color: var(--neon-fucsia);
+    text-shadow: 0 0 8px rgba(255, 0, 255, 0.4);
+}
+
+/* Keyframes para el scroll infinito */
+@keyframes ticker-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } /* Se mueve la mitad para conectar con el clon */
+}
+
+/* --- AJUSTE PARA MODO CLARO --- */
+[data-theme="light"] .zz-ticker-wrapper {
+    background: #ffffff;
+    border-bottom: 2px solid #eee;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .zz-ticker-item {
+    text-shadow: none; /* Quitamos brillo en modo claro para legibilidad */
 }
